@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aerial Gymnastics Dialogues 🤸‍♀️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .nav-menu {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn, .shuffle-btn {
+            background: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+
+        .nav-btn:hover, .shuffle-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        .nav-btn.active {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            height: 200px;
+            perspective: 1000px;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .card-front {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        .speaker-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.3);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s;
+        }
+
+        .speaker-btn:hover {
+            background: rgba(255,255,255,0.5);
+            transform: scale(1.1);
+        }
+
+        .exercise-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            display: none;
+        }
+
+        .exercise-section.active {
+            display: block;
+        }
+
+        .exercise-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .match-item, .mc-item, .fill-item, .translate-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .match-item:hover, .mc-item:hover {
+            border-color: #667eea;
+        }
+
+        .match-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .match-option {
+            padding: 15px;
+            background: #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .match-option:hover {
+            background: #dee2e6;
+        }
+
+        .match-option.selected {
+            background: #667eea;
+            color: white;
+        }
+
+        .match-option.correct {
+            background: #51cf66;
+            color: white;
+        }
+
+        .match-option.incorrect {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .feedback.correct {
+            background: #d3f9d8;
+            color: #2b8a3e;
+            display: block;
+        }
+
+        .feedback.incorrect {
+            background: #ffe3e3;
+            color: #c92a2a;
+            display: block;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .match-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤸‍♀️ Aerial Gymnastics Dialogues 🎪</h1>
+        
+        <div class="nav-menu">
+            <button class="nav-btn active" data-level="a1">Dialogue A1 🌟</button>
+            <button class="nav-btn" data-level="b1">Dialogue B1 ⭐⭐</button>
+            <button class="shuffle-btn">🔀 Shuffle Cards</button>
+        </div>
+
+        <div id="cards-section"></div>
+
+        <div class="nav-menu">
+            <button class="nav-btn" data-exercise="match">📝 Match Exercise</button>
+            <button class="nav-btn" data-exercise="mc">✅ Multiple Choice</button>
+            <button class="nav-btn" data-exercise="fill">✏️ Fill in the Blank</button>
+            <button class="nav-btn" data-exercise="translate">🔄 Translation</button>
+            <button class="nav-btn" data-exercise="create">💬 Create Your Own</button>
+        </div>
+
+        <div id="match-exercise" class="exercise-section">
+            <h2>📝 Match Russian with English</h2>
+            <div id="match-content"></div>
+            <button class="btn" onclick="checkMatching()">Check Answers</button>
+            <div id="match-feedback" class="feedback"></div>
+        </div>
+
+        <div id="mc-exercise" class="exercise-section">
+            <h2>✅ Multiple Choice</h2>
+            <div id="mc-content"></div>
+            <button class="btn" onclick="checkMultipleChoice()">Check Answers</button>
+            <div id="mc-feedback" class="feedback"></div>
+        </div>
+
+        <div id="fill-exercise" class="exercise-section">
+            <h2>✏️ Fill in the Blank</h2>
+            <div id="fill-content"></div>
+            <button class="btn" onclick="checkFillBlanks()">Check Answers</button>
+            <div id="fill-feedback" class="feedback"></div>
+        </div>
+
+        <div id="translate-exercise" class="exercise-section">
+            <h2>🔄 Translate Complex Sentences</h2>
+            <div id="translate-content"></div>
+            <button class="btn" onclick="checkTranslation()">Check Answers</button>
+            <div id="translate-feedback" class="feedback"></div>
+        </div>
+
+        <div id="create-exercise" class="exercise-section">
+            <h2>💬 Create Your Own Dialogue</h2>
+            <p>Write a similar dialogue about yourself (at least 6 lines):</p>
+            <textarea id="user-dialogue" rows="10" placeholder="Example:
+- Hi, I'm Maria, I'll be your instructor today.
+- Nice to meet you.
+- Is this your first time?
+..."></textarea>
+            <button class="btn" onclick="checkUserDialogue()">Check My Dialogue</button>
+            <div id="create-feedback" class="feedback"></div>
+        </div>
+    </div>
+
+    <script>
+        const dialogues = {
+            a1: [
+                {ru: "Привет, я твой инструктор.", en: "Hello, I'm your instructor."},
+                {ru: "Меня зовут Анна.", en: "My name is Anna."},
+                {ru: "Это твое первое занятие?", en: "Is this your first class?"},
+                {ru: "Да.", en: "Yes."},
+                {ru: "Ты раньше занималась воздушной гимнастикой?", en: "Have you done aerial before?"},
+                {ru: "Нет.", en: "No."},
+                {ru: "Это нормально.", en: "That's okay."},
+                {ru: "Мы начнем медленно.", en: "We start slow."},
+                {ru: "Ты готова?", en: "Are you ready?"},
+                {ru: "Да.", en: "Yes, I am."}
+            ],
+            b1: [
+                {ru: "Привет, я Анна, сегодня я буду твоим инструктором.", en: "Hi, I'm Anna, I'll be your aerial instructor today."},
+                {ru: "Приятно познакомиться.", en: "Nice to meet you."},
+                {ru: "Это твое первое занятие по воздушной гимнастике?", en: "Is this your first time doing aerial?"},
+                {ru: "Да.", en: "Yes, it is."},
+                {ru: "Ты занималась спортом или танцами?", en: "Have you done any sports or dance before?"},
+                {ru: "Я занималась йогой и танцами.", en: "I've done some yoga and dance."},
+                {ru: "Это точно поможет.", en: "That will definitely help you."},
+                {ru: "Какая у тебя цель в воздушной гимнастике?", en: "What's your goal with aerial training?"},
+                {ru: "Я хочу стать сильнее и увереннее.", en: "I want to get stronger and more confident."},
+                {ru: "Отлично, давай начинать.", en: "Great, let's get started."}
+            ]
+        };
+
+        let currentLevel = 'a1';
+        let currentDialogue = [...dialogues.a1];
+        let matchSelections = {left: null, right: null};
+
+        function speak(text) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-GB';
+            utterance.rate = 0.9;
+            speechSynthesis.speak(utterance);
+        }
+
+        function renderCards() {
+            const container = document.getElementById('cards-section');
+            container.innerHTML = '<div class="cards-container"></div>';
+            const cardsContainer = container.querySelector('.cards-container');
+            
+            currentDialogue.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <button class="speaker-btn" onclick="event.stopPropagation(); speak('${item.ru.replace(/'/g, "\\'")}')">🔊</button>
+                            <div>${item.ru}</div>
+                        </div>
+                        <div class="card-back">
+                            <button class="speaker-btn" onclick="event.stopPropagation(); speak('${item.en.replace(/'/g, "\\'")}')">🔊</button>
+                            <div>${item.en}</div>
+                        </div>
+                    </div>
+                `;
+                card.addEventListener('click', () => card.classList.toggle('flipped'));
+                cardsContainer.appendChild(card);
+            });
+        }
+
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        document.querySelectorAll('.nav-btn[data-level]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.nav-btn[data-level]').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentLevel = btn.dataset.level;
+                currentDialogue = [...dialogues[currentLevel]];
+                renderCards();
+                document.querySelectorAll('.exercise-section').forEach(s => s.classList.remove('active'));
+            });
+        });
+
+        document.querySelector('.shuffle-btn').addEventListener('click', () => {
+            currentDialogue = shuffleArray(currentDialogue);
+            renderCards();
+        });
+
+        document.querySelectorAll('.nav-btn[data-exercise]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const exercise = btn.dataset.exercise;
+                document.querySelectorAll('.exercise-section').forEach(s => s.classList.remove('active'));
+                document.getElementById(`${exercise}-exercise`).classList.add('active');
+                
+                if (exercise === 'match') setupMatchExercise();
+                if (exercise === 'mc') setupMultipleChoice();
+                if (exercise === 'fill') setupFillBlanks();
+                if (exercise === 'translate') setupTranslation();
+            });
+        });
+
+        function setupMatchExercise() {
+            const content = document.getElementById('match-content');
+            const items = shuffleArray([...dialogues[currentLevel]]).slice(0, 5);
+            const shuffledEn = shuffleArray([...items]);
+            
+            let html = '<div class="match-grid">';
+            html += '<div>';
+            items.forEach((item, i) => {
+                html += `<div class="match-option" data-side="left" data-index="${i}" onclick="selectMatch(this)">${item.ru}</div>`;
+            });
+            html += '</div><div>';
+            shuffledEn.forEach((item, i) => {
+                const origIndex = items.findIndex(x => x.en === item.en);
+                html += `<div class="match-option" data-side="right" data-index="${origIndex}" onclick="selectMatch(this)">${item.en}</div>`;
+            });
+            html += '</div></div>';
+            
+            content.innerHTML = html;
+            matchSelections = {left: null, right: null, pairs: []};
+        }
+
+        function selectMatch(el) {
+            const side = el.dataset.side;
+            
+            if (matchSelections[side]) {
+                matchSelections[side].classList.remove('selected');
+            }
+            
+            el.classList.add('selected');
+            matchSelections[side] = el;
+            
+            if (matchSelections.left && matchSelections.right) {
+                const leftIndex = matchSelections.left.dataset.index;
+                const rightIndex = matchSelections.right.dataset.index;
+                
+                matchSelections.pairs.push({
+                    left: matchSelections.left,
+                    right: matchSelections.right,
+                    correct: leftIndex === rightIndex
+                });
+                
+                matchSelections.left = null;
+                matchSelections.right = null;
+            }
+        }
+
+        function checkMatching() {
+            const feedback = document.getElementById('match-feedback');
+            let correct = 0;
+            
+            matchSelections.pairs.forEach(pair => {
+                if (pair.correct) {
+                    pair.left.classList.add('correct');
+                    pair.right.classList.add('correct');
+                    correct++;
+                } else {
+                    pair.left.classList.add('incorrect');
+                    pair.right.classList.add('incorrect');
+                }
+            });
+            
+            feedback.className = correct === matchSelections.pairs.length ? 'feedback correct' : 'feedback incorrect';
+            feedback.textContent = `You got ${correct} out of ${matchSelections.pairs.length} correct! ${correct === matchSelections.pairs.length ? '🎉' : 'Try again!'}`;
+        }
+
+        function setupMultipleChoice() {
+            const content = document.getElementById('mc-content');
+            const items = shuffleArray([...dialogues[currentLevel]]).slice(0, 5);
+            
+            let html = '';
+            items.forEach((item, i) => {
+                const options = [item.en];
+                const otherItems = dialogues[currentLevel].filter(x => x.en !== item.en);
+                for (let j = 0; j < 2; j++) {
+                    const randomItem = otherItems[Math.floor(Math.random() * otherItems.length)];
+                    if (!options.includes(randomItem.en)) options.push(randomItem.en);
+                }
+                const shuffledOptions = shuffleArray(options);
+                
+                html += `<div class="mc-item">
+                    <p><strong>${item.ru}</strong></p>
+                    ${shuffledOptions.map(opt => `
+                        <label style="display: block; margin: 5px 0;">
+                            <input type="radio" name="mc${i}" value="${opt}">
+                            ${opt}
+                        </label>
+                    `).join('')}
+                    <input type="hidden" class="mc-answer" value="${item.en}">
+                </div>`;
+            });
+            
+            content.innerHTML = html;
+        }
+
+        function checkMultipleChoice() {
+            const items = document.querySelectorAll('.mc-item');
+            let correct = 0;
+            
+            items.forEach((item, i) => {
+                const selected = item.querySelector(`input[name="mc${i}"]:checked`);
+                const answer = item.querySelector('.mc-answer').value;
+                
+                if (selected && selected.value === answer) {
+                    correct++;
+                    item.style.borderColor = '#51cf66';
+                } else {
+                    item.style.borderColor = '#ff6b6b';
+                }
+            });
+            
+            const feedback = document.getElementById('mc-feedback');
+            feedback.className = correct === items.length ? 'feedback correct' : 'feedback incorrect';
+            feedback.textContent = `You got ${correct} out of ${items.length} correct! ${correct === items.length ? '🎉' : 'Try again!'}`;
+        }
+
+        function setupFillBlanks() {
+            const content = document.getElementById('fill-content');
+            const items = shuffleArray([...dialogues[currentLevel]]).slice(0, 5);
+            
+            let html = '';
+            items.forEach((item, i) => {
+                const words = item.en.split(' ');
+                const blankIndex = Math.floor(Math.random() * words.length);
+                const blank = words[blankIndex];
+                words[blankIndex] = '_____';
+                
+                html += `<div class="fill-item">
+                    <p><strong>${item.ru}</strong></p>
+                    <p>${words.join(' ')}</p>
+                    <input type="text" class="fill-input" data-answer="${blank.toLowerCase().replace(/[.,?!]/g, '')}">
+                </div>`;
+            });
+            
+            content.innerHTML = html;
+        }
+
+        function checkFillBlanks() {
+            const items = document.querySelectorAll('.fill-item');
+            let correct = 0;
+            
+            items.forEach(item => {
+                const input = item.querySelector('.fill-input');
+                const answer = input.dataset.answer;
+                const userAnswer = input.value.toLowerCase().trim().replace(/[.,?!]/g, '');
+                
+                if (userAnswer === answer) {
+                    correct++;
+                    item.style.borderColor = '#51cf66';
+                } else {
+                    item.style.borderColor = '#ff6b6b';
+                }
+            });
+            
+            const feedback = document.getElementById('fill-feedback');
+            feedback.className = correct === items.length ? 'feedback correct' : 'feedback incorrect';
+            feedback.textContent = `You got ${correct} out of ${items.length} correct! ${correct === items.length ? '🎉' : 'Try again!'}`;
+        }
+
+        function setupTranslation() {
+            const content = document.getElementById('translate-content');
+            const complexSentences = currentLevel === 'a1' 
+                ? [
+                    {ru: "Ты раньше занималась воздушной гимнастикой?", en: "Have you done aerial before?"},
+                    {ru: "Мы начнем медленно.", en: "We start slow."},
+                    {ru: "Ты готова?", en: "Are you ready?"}
+                  ]
+                : [
+                    {ru: "Ты занималась спортом или танцами?", en: "Have you done any sports or dance before?"},
+                    {ru: "Это точно поможет.", en: "That will definitely help you."},
+                    {ru: "Какая у тебя цель в воздушной гимнастике?", en: "What's your goal with aerial training?"},
+                    {ru: "Я хочу стать сильнее и увереннее.", en: "I want to get stronger and more confident."}
+                  ];
+            
+            let html = '';
+            complexSentences.forEach((item, i) => {
+                html += `<div class="translate-item">
+                    <p><strong>${item.ru}</strong></p>
+                    <input type="text" class="translate-input" data-answer="${item.en.toLowerCase()}" placeholder="Type your translation...">
+                </div>`;
+            });
+            
+            content.innerHTML = html;
+        }
+
+        function checkTranslation() {
+            const items = document.querySelectorAll('.translate-item');
+            let correct = 0;
+            
+            items.forEach(item => {
+                const input = item.querySelector('.translate-input');
+                const answer = input.dataset.answer;
+                const userAnswer = input.value.toLowerCase().trim();
+                
+                const similarity = userAnswer === answer || userAnswer.replace(/[.,?!]/g, '') === answer.replace(/[.,?!]/g, '');
+                
+                if (similarity) {
+                    correct++;
+                    item.style.borderColor = '#51cf66';
+                } else {
+                    item.style.borderColor = '#ff6b6b';
+                }
+            });
+            
+            const feedback = document.getElementById('translate-feedback');
+            feedback.className = correct === items.length ? 'feedback correct' : 'feedback incorrect';
+            feedback.textContent = `You got ${correct} out of ${items.length} correct! ${correct === items.length ? '🎉' : 'Keep practicing!'}`;
+        }
+
+        function checkUserDialogue() {
+            const textarea = document.getElementById('user-dialogue');
+            const text = textarea.value.trim();
+            const feedback = document.getElementById('create-feedback');
+            
+            const lines = text.split('\n').filter(line => line.trim().length > 0);
+            const hasGreeting = /hi|hello|привет/i.test(text);
+            const hasQuestion = /\?/.test(text);
+            const hasIntroduction = /name|зовут|i'm|я/i.test(text);
+            
+            if (lines.length < 6) {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = '❌ Your dialogue should have at least 6 lines. Keep going!';
+            } else if (!hasGreeting || !hasQuestion || !hasIntroduction) {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = '⚠️ Good start! Try to include: a greeting, an introduction, and at least one question.';
+            } else {
+                feedback.className = 'feedback correct';
+                feedback.textContent = '🎉 Excellent work! Your dialogue has a good structure with greetings, introductions, and questions. Well done!';
+            }
+        }
+
+        renderCards();
+    </script>
+</body>
+</html>

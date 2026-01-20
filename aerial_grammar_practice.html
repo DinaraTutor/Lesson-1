@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aerial Training Grammar Practice 🎪</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 30px;
+            text-align: center;
+            color: white;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .level-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 3px solid #dee2e6;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            background: #e9ecef;
+            border: none;
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .tab:hover {
+            background: #dee2e6;
+        }
+        
+        .tab.active {
+            background: white;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            margin-bottom: -3px;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .level-content {
+            display: none;
+        }
+        
+        .level-content.active {
+            display: block;
+        }
+        
+        .grammar-section {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .grammar-section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        th {
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+        }
+        
+        tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .example {
+            background: #e7f3ff;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #2196F3;
+        }
+        
+        .exercise {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .question {
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 2px solid #dee2e6;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            margin: 10px 5px;
+            transition: transform 0.2s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .correct {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        
+        .incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+        
+        .feedback {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .score {
+            text-align: center;
+            font-size: 1.5em;
+            margin: 20px 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎪 Aerial Training Grammar Practice 🎪</h1>
+            <p>Практика грамматики с диалогами из воздушной гимнастики</p>
+        </header>
+        
+        <div class="level-tabs">
+            <button class="tab active" onclick="showLevel('a1')">📘 Level A1</button>
+            <button class="tab" onclick="showLevel('b1')">📗 Level B1</button>
+        </div>
+        
+        <div class="content">
+            <!-- A1 LEVEL -->
+            <div id="a1" class="level-content active">
+                <div class="grammar-section">
+                    <h2>1️⃣ Глагол to be (am / is / are) — утвердительные формы</h2>
+                    <table>
+                        <tr>
+                            <th>Местоимение</th>
+                            <th>Форма to be</th>
+                            <th>Пример</th>
+                        </tr>
+                        <tr>
+                            <td>I</td>
+                            <td>am</td>
+                            <td>I am Anna 😊</td>
+                        </tr>
+                        <tr>
+                            <td>You / We / They</td>
+                            <td>are</td>
+                            <td>You are ready 💪</td>
+                        </tr>
+                        <tr>
+                            <td>He / She / It</td>
+                            <td>is</td>
+                            <td>This is your class 🎪</td>
+                        </tr>
+                    </table>
+                    <div class="example">
+                        <strong>Из диалога:</strong> "I'm your instructor" / "My name is Anna"
+                    </div>
+                </div>
+
+                <div class="grammar-section">
+                    <h2>2️⃣ Глагол to be — вопросы (Yes / No)</h2>
+                    <p><strong>Правило:</strong> To be ставим перед подлежащим</p>
+                    <table>
+                        <tr>
+                            <th>Утверждение</th>
+                            <th>Вопрос</th>
+                        </tr>
+                        <tr>
+                            <td>This is your first class</td>
+                            <td>Is this your first class? 🤔</td>
+                        </tr>
+                        <tr>
+                            <td>You are ready</td>
+                            <td>Are you ready? ✨</td>
+                        </tr>
+                    </table>
+                    <div class="example">
+                        <strong>Из диалога:</strong> "Is this your first class?" / "Are you ready?"
+                    </div>
+                </div>
+
+                <div class="grammar-section">
+                    <h2>3️⃣ Краткие ответы с to be</h2>
+                    <table>
+                        <tr>
+                            <th>Вопрос</th>
+                            <th>Да ✅</th>
+                            <th>Нет ❌</th>
+                        </tr>
+                        <tr>
+                            <td>Are you ready?</td>
+                            <td>Yes, I am</td>
+                            <td>No, I'm not</td>
+                        </tr>
+                        <tr>
+                            <td>Is this your class?</td>
+                            <td>Yes, it is</td>
+                            <td>No, it isn't</td>
+                        </tr>
+                    </table>
+                    <div class="example">
+                        <strong>Из диалога:</strong> "Yes, I am" / "No"
+                    </div>
+                </div>
+
+                <div class="grammar-section">
+                    <h2>4️⃣ Личные местоимения</h2>
+                    <p><strong>I, you, we</strong> — кто выполняет действие</p>
+                    <div class="example">
+                        💁‍♀️ <strong>I</strong> am your instructor<br>
+                        👤 <strong>You</strong> are ready<br>
+                        👥 <strong>We</strong> start slow
+                    </div>
+                </div>
+
+                <div class="grammar-section">
+                    <h2>5️⃣ Притяжательные местоимения (my, your)</h2>
+                    <table>
+                        <tr>
+                            <th>Личное</th>
+                            <th>Притяжательное</th>
+                            <th>Пример</th>
+                        </tr>
+                        <tr>
+                            <td>I</td>
+                            <td>my</td>
+                            <td>My name is Anna 📝</td>
+                        </tr>
+                        <tr>
+                            <td>You</td>
+                            <td>your</td>
+                            <td>Your first class 🎪</td>
+                        </tr>
+                    </table>
+                    <div class="example">
+                        <strong>Из диалога:</strong> "I'm your instructor" / "My name is Anna"
+                    </div>
+                </div>
+
+                <div class="grammar-section">
+                    <h2>6️⃣ Present Simple — утвердительные предложения</h2>
+                    <p><strong>Правило:</strong> I/We + глагол без изменений</p>
+                    <div class="example">
+                        👥 We start slow<br>
+                        💪 I train every day
+                    </div>
+                </div>
+
+                <!-- A1 EXERCISES -->
+                <div class="exercise">
+                    <h2>✍️ Упражнения A1</h2>
+                    <div id="a1-exercises"></div>
+                    <button class="btn" onclick="checkAnswers('a1')">Проверить ответы</button>
+                    <button class="btn" onclick="resetExercises('a1')">Сбросить</button>
+                    <div id="a1-score" class="score"></div>
+                </div>
+            </div>
+
+            <!-- B1 LEVEL -->
+            <div id="b1" class="level-content">
+                <div class="grammar-section">
+                    <h2>1️⃣ Future Simple с will</h2>
+                    <p><strong>Правило:</strong> will + глагол (для всех лиц одинаково)</p>
+                    <table>
+                        <tr>
+                            <th>Утверждение</th>
+                            <th>Вопрос</th>
+                            <th>Отрицание</th>
+                        </tr>
+                        <tr>
+                            <td>I will be your instructor</td>
+                            <td>Will you help me?</td>
+                            <td>I won't give up</td>
+                        </tr>
+                    </table>
+                    <div class="example">
+                        <strong>Из диалога:</strong> "I'll be your aerial instructor today"
+                    </div>
+                </div>
+
+                <div class="grammar-section">
+                    <h2>2️⃣ Present Perfect — опыт (have / has + V3)</h2>
+                    <p><strong>Правило:</strong> Используем для опыта в жизни</p>
+                    <table>
+                        <tr>
+                            <th>Лицо</th>
+                            <th>Формула</th>
+                            <th>Пример</th>
+                        </tr>
+                        <tr>
+                            <td>I / You / We / They</td>
+                            <td>have + V3</td>
+                            <td>I have done yoga 🧘‍♀️</td>
+                        </tr>
+                        <tr>
+                            <td>He / She / It</td>
+                            <td>has + V3</td>
+                            <td>She has trained before 💪</td>
+                        </tr>
+                    </table>
+                    <div class="example">
+                        <strong>Из диалога:</strong> "Have you done any sports before?" / "I've done some yoga"
+                    </div>
+                </div>
+
+                <div class="grammar-section">
+                    <h2>3️⃣ Вопросы в Present Perfect</h2>
+                    <p><strong>Правило:</strong> Have/Has + подлежащее + V3?</p>
+                    <div class="example">
+                        ❓ Have you done aerial before?<br>
+                        ❓ Has she tried this exercise?
+                    </div>
+                </div>
+
+                <div class="grammar-section">
+                    <h2>4️⃣ Развернутые ответы (полные предложения)</h2>
+                    <table>
+                        <tr>
+                            <th>Краткий ответ</th>
+                            <th>Развернутый ответ</th>
+                        </tr>
+                        <tr>
+                            <td>Yes, it is</td>
+                            <td>Yes, this is my first time doing aerial 🎪</td>
+                        </tr>
+                        <tr>
+                            <td>Yes, I have</td>
+                            <td>I've done some yoga and dance 💃</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="grammar-section">
+                    <h2>5️⃣ Инфинитив цели: want to + verb</h2>
+                    <p><strong>Правило:</strong> want to показывает цель/желание</p>
+                    <div class="example">
+                        🎯 I want to get stronger<br>
+                        🎯 I want to be more confident<br>
+                        🎯 She wants to learn aerial
+                    </div>
+                </div>
+
+                <div class="grammar-section">
+                    <h2>6️⃣ Wh-вопросы: What's your...?</h2>
+                    <p><strong>Правило:</strong> What's = What is (сокращение)</p>
+                    <div class="example">
+                        ❓ What's your goal? 🎯<br>
+                        ❓ What's your name? 📝<br>
+                        ❓ What's your experience? 💼
+                    </div>
+                </div>
+
+                <div class="grammar-section">
+                    <h2>7️⃣ Наречия степени: definitely</h2>
+                    <p><strong>definitely</strong> = точно, определенно (усилитель)</p>
+                    <div class="example">
+                        ✨ That will <strong>definitely</strong> help you<br>
+                        ✨ I will <strong>definitely</strong> come to class
+                    </div>
+                </div>
+
+                <!-- B1 EXERCISES -->
+                <div class="exercise">
+                    <h2>✍️ Упражнения B1</h2>
+                    <div id="b1-exercises"></div>
+                    <button class="btn" onclick="checkAnswers('b1')">Проверить ответы</button>
+                    <button class="btn" onclick="resetExercises('b1')">Сбросить</button>
+                    <div id="b1-score" class="score"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const exercises = {
+            a1: [
+                {q: "I ___ your instructor. (am/is/are)", a: "am"},
+                {q: "___ this your first class? (Am/Is/Are)", a: "Is"},
+                {q: "My name ___ Anna. (am/is/are)", a: "is"},
+                {q: "___ you ready? (Am/Is/Are)", a: "Are"},
+                {q: "Yes, I ___. (am/is/are)", a: "am"},
+                {q: "___ name is Anna. (I/My/You)", a: "My"},
+                {q: "This is ___ first class. (you/your)", a: "your"},
+                {q: "We ___ slow. (start/starts)", a: "start"},
+                {q: "I ___ every day. (train/trains)", a: "train"},
+                {q: "That's ___. (okay/OK/ok) - любой вариант", a: "okay"}
+            ],
+            b1: [
+                {q: "I ___ be your instructor today. (will/'ll)", a: "will"},
+                {q: "___ you done aerial before? (Have/Has)", a: "Have"},
+                {q: "I ___ done some yoga. (have/'ve)", a: "have"},
+                {q: "That ___ definitely help. (will/'ll)", a: "will"},
+                {q: "___ your goal? (What/What's)", a: "What's"},
+                {q: "I want ___ get stronger. (to/for)", a: "to"},
+                {q: "I've done some yoga and ___. (dance/dancing)", a: "dance"},
+                {q: "___ this your first time? (Is/Are)", a: "Is"},
+                {q: "Yes, it ___. (is/does)", a: "is"},
+                {q: "That will ___ help you. (definite/definitely)", a: "definitely"}
+            ]
+        };
+
+        function showLevel(level) {
+            document.querySelectorAll('.level-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(level).classList.add('active');
+            event.target.classList.add('active');
+            
+            if (!document.getElementById(level + '-exercises').innerHTML) {
+                loadExercises(level);
+            }
+        }
+
+        function loadExercises(level) {
+            const container = document.getElementById(level + '-exercises');
+            let html = '';
+            
+            exercises[level].forEach((ex, i) => {
+                html += `
+                    <div class="question" id="${level}-q${i}">
+                        <p><strong>${i + 1}.</strong> ${ex.q}</p>
+                        <input type="text" id="${level}-a${i}" placeholder="Введите ответ...">
+                        <div id="${level}-f${i}" class="feedback"></div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function checkAnswers(level) {
+            let correct = 0;
+            const total = exercises[level].length;
+            
+            exercises[level].forEach((ex, i) => {
+                const input = document.getElementById(`${level}-a${i}`);
+                const question = document.getElementById(`${level}-q${i}`);
+                const feedback = document.getElementById(`${level}-f${i}`);
+                const answer = input.value.trim().toLowerCase();
+                const correctAnswer = ex.a.toLowerCase();
+                
+                // Allow variations like 'll for will, 've for have, okay/ok
+                const isCorrect = answer === correctAnswer || 
+                                 (correctAnswer === 'will' && answer === "'ll") ||
+                                 (correctAnswer === 'have' && answer === "'ve") ||
+                                 (correctAnswer === 'okay' && (answer === 'ok' || answer === 'okay'));
+                
+                if (isCorrect) {
+                    question.classList.remove('incorrect');
+                    question.classList.add('correct');
+                    feedback.innerHTML = '✅ Правильно!';
+                    feedback.style.color = '#28a745';
+                    correct++;
+                } else {
+                    question.classList.remove('correct');
+                    question.classList.add('incorrect');
+                    feedback.innerHTML = `❌ Правильный ответ: <strong>${ex.a}</strong>`;
+                    feedback.style.color = '#dc3545';
+                }
+            });
+            
+            const score = document.getElementById(`${level}-score`);
+            const percentage = Math.round((correct / total) * 100);
+            let emoji = percentage >= 80 ? '🎉' : percentage >= 60 ? '👍' : '💪';
+            score.innerHTML = `${emoji} Результат: ${correct} из ${total} (${percentage}%)`;
+        }
+
+        function resetExercises(level) {
+            exercises[level].forEach((ex, i) => {
+                const input = document.getElementById(`${level}-a${i}`);
+                const question = document.getElementById(`${level}-q${i}`);
+                const feedback = document.getElementById(`${level}-f${i}`);
+                
+                input.value = '';
+                question.classList.remove('correct', 'incorrect');
+                feedback.innerHTML = '';
+            });
+            
+            document.getElementById(`${level}-score`).innerHTML = '';
+        }
+
+        // Load A1 exercises on page load
+        loadExercises('a1');
+    </script>
+</body>
+</html>

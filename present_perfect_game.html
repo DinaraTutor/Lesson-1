@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aerial Circus Challenge</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        #gameContainer {
+            width: 900px;
+            max-width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow-y: auto;
+            max-height: 95vh;
+        }
+
+        #startScreen, #gameScreen, #gameOverScreen {
+            position: relative;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        #gameScreen {
+            display: none;
+            padding: 20px;
+        }
+
+        #gameOverScreen {
+            display: none;
+            background: rgba(118, 75, 162, 0.95);
+            color: white;
+        }
+
+        h1 {
+            font-size: 42px;
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .rulesTable {
+            width: 100%;
+            max-width: 700px;
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0 30px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .rulesTable h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-size: 16px;
+        }
+
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #e0e0e0;
+            color: #333;
+            font-size: 15px;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        .highlight {
+            color: #f5576c;
+            font-weight: bold;
+        }
+
+        #scoreBoard {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        #questionArea {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+            color: white;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #question {
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        #answersContainer {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .answerBtn {
+            min-width: 250px;
+            padding: 20px 30px;
+            font-size: 22px;
+            background: white;
+            color: #667eea;
+            border: 3px solid #667eea;
+        }
+
+        .answerBtn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .correct {
+            animation: correctAnim 0.5s;
+            background: #4caf50 !important;
+            color: white !important;
+            border-color: #4caf50 !important;
+        }
+
+        .incorrect {
+            animation: incorrectAnim 0.5s;
+            background: #f44336 !important;
+            color: white !important;
+            border-color: #f44336 !important;
+        }
+
+        @keyframes correctAnim {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes incorrectAnim {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        #timer {
+            font-size: 36px;
+            color: #f5576c;
+            font-weight: bold;
+        }
+
+        #lives {
+            font-size: 36px;
+        }
+
+        .heart {
+            color: #f5576c;
+            margin: 0 2px;
+        }
+
+        #finalScore {
+            font-size: 64px;
+            margin: 20px 0;
+        }
+
+        .instruction {
+            background: rgba(102, 126, 234, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            color: #666;
+            max-width: 700px;
+        }
+
+        .instruction h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        #progress {
+            font-size: 18px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <!-- Start Screen -->
+        <div id="startScreen">
+            <h1>🎪 Aerial Circus Challenge</h1>
+            <div class="subtitle">Choose the Grammatically Correct Answer!</div>
+            
+            <div class="instruction">
+                <h3>How to Play:</h3>
+                <p>You'll see a question. Choose the answer that is GRAMMATICALLY CORRECT.</p>
+                <p>⚠️ One answer will have a grammar mistake - avoid it!</p>
+                <p>You have 3 lives. Answer 15 questions correctly to win!</p>
+            </div>
+
+            <div class="rulesTable">
+                <h3>📚 Present Perfect Rules</h3>
+                <table>
+                    <tr>
+                        <th>Subject</th>
+                        <th>Question</th>
+                        <th>Short Answer (+)</th>
+                        <th>Short Answer (−)</th>
+                    </tr>
+                    <tr>
+                        <td><strong>I / you / we / they</strong></td>
+                        <td><span class="highlight">Have</span> you done aerials?</td>
+                        <td>Yes, I <span class="highlight">have</span></td>
+                        <td>No, I <span class="highlight">haven't</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>he / she / it</strong></td>
+                        <td><span class="highlight">Has</span> she tried trapeze?</td>
+                        <td>Yes, she <span class="highlight">has</span></td>
+                        <td>No, she <span class="highlight">hasn't</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>they</strong></td>
+                        <td><span class="highlight">Have</span> they competed?</td>
+                        <td>Yes, they <span class="highlight">have</span></td>
+                        <td>No, they <span class="highlight">haven't</span></td>
+                    </tr>
+                </table>
+            </div>
+
+            <button onclick="startGame()">START GAME</button>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="gameScreen">
+            <div id="scoreBoard">
+                <div id="progress">Question: <span id="currentQ">1</span>/15</div>
+                <div>Score: <span id="score">0</span></div>
+                <div id="lives">
+                    <span class="heart">❤️</span>
+                    <span class="heart">❤️</span>
+                    <span class="heart">❤️</span>
+                </div>
+            </div>
+            
+            <div id="questionArea">
+                <div id="question">Have you done aerial silks?</div>
+            </div>
+
+            <div id="answersContainer">
+                <button class="answerBtn" onclick="checkAnswer(0)">Yes, I have</button>
+                <button class="answerBtn" onclick="checkAnswer(1)">No, I haven't</button>
+            </div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="gameOverScreen">
+            <h1 id="resultTitle">🎊 Game Over!</h1>
+            <div id="finalScore">0</div>
+            <div class="subtitle" id="resultText">Points</div>
+            <button onclick="startGame()">PLAY AGAIN</button>
+            <button onclick="showStart()">MAIN MENU</button>
+        </div>
+    </div>
+
+    <script>
+        const questionBank = [
+            // I/You questions
+            {q: "Have you done aerial silks?", correct: "Yes, I have", wrong: "Yes, I has"},
+            {q: "Have you tried trapeze?", correct: "No, I haven't", wrong: "No, I hasn't"},
+            {q: "Have you performed on stage?", correct: "Yes, I have", wrong: "Yes, I has"},
+            {q: "Have you done a backflip?", correct: "No, I haven't", wrong: "No, I hasn't"},
+            {q: "Have you competed before?", correct: "Yes, I have", wrong: "Yes, I has"},
+            
+            // He/She questions
+            {q: "Has she done aerial hoop?", correct: "Yes, she has", wrong: "Yes, she have"},
+            {q: "Has he tried pole dancing?", correct: "No, he hasn't", wrong: "No, he haven't"},
+            {q: "Has your coach taught aerials?", correct: "Yes, he has", wrong: "Yes, he have"},
+            {q: "Has she performed a drop?", correct: "No, she hasn't", wrong: "No, she haven't"},
+            {q: "Has he won any medals?", correct: "Yes, he has", wrong: "Yes, he have"},
+            
+            // They questions
+            {q: "Have they learned ballet?", correct: "Yes, they have", wrong: "Yes, they has"},
+            {q: "Have they done partner acrobatics?", correct: "No, they haven't", wrong: "No, they hasn't"},
+            {q: "Have they competed professionally?", correct: "Yes, they have", wrong: "Yes, they has"},
+            
+            // We questions
+            {q: "Have we practiced this routine?", correct: "No, we haven't", wrong: "No, we hasn't"},
+            {q: "Have we performed together?", correct: "Yes, we have", wrong: "Yes, we has"}
+        ];
+
+        let score = 0;
+        let lives = 3;
+        let currentQuestionIndex = 0;
+        let usedQuestions = [];
+        let currentCorrectAnswer = "";
+
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        function startGame() {
+            score = 0;
+            lives = 3;
+            currentQuestionIndex = 0;
+            usedQuestions = shuffleArray(questionBank).slice(0, 15);
+            
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('gameOverScreen').style.display = 'none';
+            document.getElementById('gameScreen').style.display = 'flex';
+            
+            updateScore();
+            updateLives();
+            nextQuestion();
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex >= 15) {
+                winGame();
+                return;
+            }
+
+            const questionData = usedQuestions[currentQuestionIndex];
+            currentCorrectAnswer = questionData.correct;
+            
+            document.getElementById('question').textContent = questionData.q;
+            document.getElementById('currentQ').textContent = currentQuestionIndex + 1;
+            
+            // Randomize answer positions
+            const answers = [questionData.correct, questionData.wrong];
+            if (Math.random() > 0.5) {
+                answers.reverse();
+            }
+            
+            const buttons = document.querySelectorAll('.answerBtn');
+            buttons[0].textContent = answers[0];
+            buttons[1].textContent = answers[1];
+            
+            buttons.forEach(btn => {
+                btn.classList.remove('correct', 'incorrect');
+                btn.disabled = false;
+            });
+        }
+
+        function checkAnswer(btnIndex) {
+            const buttons = document.querySelectorAll('.answerBtn');
+            const selectedAnswer = buttons[btnIndex].textContent;
+            
+            buttons.forEach(btn => btn.disabled = true);
+            
+            if (selectedAnswer === currentCorrectAnswer) {
+                score += 10;
+                buttons[btnIndex].classList.add('correct');
+                playSound('correct');
+                currentQuestionIndex++;
+                
+                setTimeout(() => {
+                    if (currentQuestionIndex >= 15) {
+                        winGame();
+                    } else {
+                        nextQuestion();
+                    }
+                }, 1000);
+            } else {
+                lives--;
+                buttons[btnIndex].classList.add('incorrect');
+                
+                // Show correct answer
+                buttons.forEach(btn => {
+                    if (btn.textContent === currentCorrectAnswer) {
+                        btn.classList.add('correct');
+                    }
+                });
+                
+                playSound('incorrect');
+                updateLives();
+                
+                if (lives <= 0) {
+                    setTimeout(gameOver, 1500);
+                } else {
+                    currentQuestionIndex++;
+                    setTimeout(() => {
+                        if (currentQuestionIndex >= 15) {
+                            winGame();
+                        } else {
+                            nextQuestion();
+                        }
+                    }, 1500);
+                }
+            }
+            
+            updateScore();
+        }
+
+        function updateScore() {
+            document.getElementById('score').textContent = score;
+        }
+
+        function updateLives() {
+            const heartsContainer = document.getElementById('lives');
+            heartsContainer.innerHTML = '';
+            for (let i = 0; i < lives; i++) {
+                heartsContainer.innerHTML += '<span class="heart">❤️</span>';
+            }
+            for (let i = lives; i < 3; i++) {
+                heartsContainer.innerHTML += '<span class="heart" style="opacity:0.3">🖤</span>';
+            }
+        }
+
+        function winGame() {
+            document.getElementById('gameScreen').style.display = 'none';
+            document.getElementById('gameOverScreen').style.display = 'flex';
+            document.getElementById('finalScore').textContent = score;
+            document.getElementById('resultTitle').textContent = '🎉 YOU WIN!';
+            document.getElementById('resultText').textContent = 'Perfect! You completed all 15 questions!';
+        }
+
+        function gameOver() {
+            document.getElementById('gameScreen').style.display = 'none';
+            document.getElementById('gameOverScreen').style.display = 'flex';
+            document.getElementById('finalScore').textContent = score;
+            document.getElementById('resultTitle').textContent = '😢 Game Over';
+            document.getElementById('resultText').textContent = 'Out of lives! Try again!';
+        }
+
+        function showStart() {
+            document.getElementById('gameOverScreen').style.display = 'none';
+            document.getElementById('startScreen').style.display = 'flex';
+        }
+
+        function playSound(type) {
+            if (type === 'correct') {
+                document.getElementById('questionArea').style.background = 'linear-gradient(135deg, #4caf50 0%, #8bc34a 100%)';
+            } else {
+                document.getElementById('questionArea').style.background = 'linear-gradient(135deg, #f44336 0%, #e91e63 100%)';
+            }
+            
+            setTimeout(() => {
+                document.getElementById('questionArea').style.background = 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)';
+            }, 300);
+        }
+    </script>
+</body>
+</html>

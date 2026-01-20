@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pronouns Memory Game</title>
+<style>
+  body {
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    background: linear-gradient(to right, #f8b500, #fceabb);
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+  }
+  h1 { color: #ff4081; }
+  #game-board {
+    display: grid;
+    grid-template-columns: repeat(5, 100px);
+    grid-gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  .card {
+    width: 100px;
+    height: 140px;
+    perspective: 1000px;
+    cursor: pointer;
+    position: relative;
+  }
+  .card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+  }
+  .card.flipped .card-inner {
+    transform: rotateY(180deg);
+  }
+  .card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  .card-front {
+    background: #fff176;
+    color: #333;
+    border: 3px solid #ff9800;
+  }
+  .card-back {
+    background: #4fc3f7;
+    color: white;
+    transform: rotateY(180deg);
+    border: 3px solid #0288d1;
+  }
+  .emoji {
+    position: absolute;
+    bottom: -20px;
+    right: -10px;
+    font-size: 24px;
+  }
+  #status {
+    margin-top: 20px;
+    font-size: 20px;
+    color: #333;
+  }
+  #quiz {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff3e0;
+    border: 3px solid #ff9800;
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 1000;
+  }
+  #quiz h2 { margin: 0 0 10px; }
+  #quiz button {
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    background: #ff9800;
+    color: white;
+    cursor: pointer;
+  }
+  #quiz button:hover { background: #f57c00; }
+</style>
+</head>
+<body>
+<h1>📚 Pronouns Memory Game 🎲</h1>
+<div id="status">Player 1's turn | Score: P1 = 0, P2 = 0</div>
+<div id="game-board"></div>
+
+<div id="quiz">
+  <h2 id="quiz-question"></h2>
+  <div id="quiz-options"></div>
+</div>
+
+<script>
+const words = ["I","I","he","he","she","she","it","it","you","you"];
+let board = document.getElementById("game-board");
+let statusDiv = document.getElementById("status");
+let quizDiv = document.getElementById("quiz");
+let quizQuestion = document.getElementById("quiz-question");
+let quizOptions = document.getElementById("quiz-options");
+
+let cards = [];
+let flipped = [];
+let currentPlayer = 1;
+let scores = {1:0, 2:0};
+let lastMatch = [];
+
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i+1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+shuffle(words);
+
+words.forEach(word => {
+  let card = document.createElement("div");
+  card.classList.add("card");
+  card.innerHTML = `
+    <div class="card-inner">
+      <div class="card-front">?</div>
+      <div class="card-back">${word}</div>
+    </div>`;
+  card.dataset.word = word;
+  card.addEventListener("click", () => flipCard(card));
+  board.appendChild(card);
+  cards.push(card);
+});
+
+function flipCard(card) {
+  if (flipped.length < 2 && !card.classList.contains("flipped")) {
+    card.classList.add("flipped");
+    flipped.push(card);
+    if (flipped.length === 2) {
+      setTimeout(checkMatch, 800);
+    }
+  }
+}
+
+function checkMatch() {
+  let [c1, c2] = flipped;
+  if (c1.dataset.word === c2.dataset.word) {
+    lastMatch = [c1, c2];
+    showQuiz(c1.dataset.word);
+  } else {
+    c1.classList.remove("flipped");
+    c2.classList.remove("flipped");
+    switchPlayer();
+  }
+  flipped = [];
+}
+
+function switchPlayer() {
+  currentPlayer = currentPlayer === 1 ? 2 : 1;
+  updateStatus();
+}
+
+function updateStatus() {
+  statusDiv.textContent = `Player ${currentPlayer}'s turn | Score: P1 = ${scores[1]}, P2 = ${scores[2]}`;
+}
+
+function showQuiz(word) {
+  quizDiv.style.display = "block";
+  quizQuestion.textContent = `Choose the correct verb for "${word}"`;
+  quizOptions.innerHTML = "";
+  let options = ["am","is","are"];
+  options.forEach(opt => {
+    let btn = document.createElement("button");
+    btn.textContent = opt;
+    btn.onclick = () => checkQuiz(word, opt);
+    quizOptions.appendChild(btn);
+  });
+}
+
+function checkQuiz(word, choice) {
+  let correct = {
+    "I":"am",
+    "he":"is",
+    "she":"is",
+    "it":"is",
+    "you":"are"
+  };
+  if (choice === correct[word]) {
+    scores[currentPlayer]++;
+    addEmoji(lastMatch, "✔️");
+    alert("Correct! 🎉 Point awarded.");
+  } else {
+    addEmoji(lastMatch, "❌");
+    setTimeout(() => {
+      lastMatch.forEach(c => c.classList.remove("flipped"));
+    }, 1000);
+    alert("Oops! Wrong answer.");
+    switchPlayer();
+  }
+  quizDiv.style.display = "none";
+  updateStatus();
+}
+
+function addEmoji(cards, emoji) {
+  cards.forEach(card => {
+    let e = document.createElement("div");
+    e.classList.add("emoji");
+    e.textContent = emoji;
+    card.appendChild(e);
+  });
+}
+</script>
+</body>
+</html>
